@@ -1,0 +1,9 @@
+.container {
+  font-size: 2rem;
+  border-bottom: 2px solid gray;
+  padding: 1rem;
+}
+.span {
+  float: right;
+  background-color: #e6e6e6;
+}

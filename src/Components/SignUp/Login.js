@@ -47,7 +47,7 @@ const Login = (props) => {
           returnSecureToken: true,
         }),
         headers: {
-          "Content-Type": "application/",
+          "Content-Type": "application/json",
         },
       });
 
