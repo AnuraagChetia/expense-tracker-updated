@@ -1,5 +1,10 @@
 import React from "react";
+import Profile from "../Components/Profile/Profile";
 const Home = (props) => {
-  return <h1>Welcome to expense tracker</h1>;
+  return (
+    <>
+      <Profile></Profile>
+    </>
+  );
 };
 export default Home;
