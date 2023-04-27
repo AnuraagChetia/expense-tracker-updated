@@ -1,16 +1,19 @@
 import React, { useRef, useState } from "react";
 import { Button, Form, FormGroup } from "react-bootstrap";
 import Input from "../UI/Input";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import AuthContext from "../../store/auth-context";
 const Login = (props) => {
   const switchModeHandler = () => {
     setisLogin((prevState) => !prevState);
   };
-
-  const [isLogin, setisLogin] = useState(true);
+  const navigate = useNavigate();
+  const [isLogin, setisLogin] = useState(false);
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const confirmPasswordInputRef = useRef();
-
+  const authCtx = useContext(AuthContext);
   const formSubmitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -61,6 +64,9 @@ const Login = (props) => {
         let errorMessage = "Authentication failed!";
         throw new Error(errorMessage);
       }
+      authCtx.login(data.idToken);
+      console.log(data);
+      navigate("/home");
     } catch (error) {
       alert(error.message);
     }
@@ -69,7 +75,7 @@ const Login = (props) => {
   return (
     <div className=" d-flex justify-content-center align-items-center">
       <Form
-        className="rounded p-4 p-sm-3 border border-primary w-25"
+        className="rounded p-4 p-sm-3 border border-primary w-sm-25"
         style={{ margin: "3rem" }}
         onSubmit={formSubmitHandler}
       >
@@ -99,12 +105,25 @@ const Login = (props) => {
             ></Input>
           )}
 
-          <Button variant="primary" type="submit">
+          <Button
+            variant="primary"
+            type="submit"
+            className="col-md-12 text-center"
+          >
             {isLogin ? "Login" : "Signup"}
           </Button>
 
+          {isLogin && (
+            <Button
+              type="button"
+              variant="danger"
+              className="col-md-12 text-center mt-2"
+            >
+              Forget Password?
+            </Button>
+          )}
           <Button
-            className="m-2"
+            className="col-md-12 text-center mt-2"
             variant="warning"
             type="button"
             onClick={switchModeHandler}
