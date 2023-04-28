@@ -5,6 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import AuthContext from "../../store/auth-context";
 const Login = (props) => {
+  const navigate = useNavigate();
+  const [isLogin, setisLogin] = useState(false);
+  // const forgetPasswordEmailRef = useRef();
+  const emailInputRef = useRef();
+  const passwordInputRef = useRef();
+  const confirmPasswordInputRef = useRef();
+  const authCtx = useContext(AuthContext);
   const [forgetMode, setForgetMode] = useState(false);
   const switchModeHandler = () => {
     setisLogin((prevState) => !prevState);
@@ -14,13 +21,7 @@ const Login = (props) => {
     setisLogin((prevState) => !prevState);
     setForgetMode((prevState) => !prevState);
   };
-  const navigate = useNavigate();
-  const [isLogin, setisLogin] = useState(false);
-  // const forgetPasswordEmailRef = useRef();
-  const emailInputRef = useRef();
-  const passwordInputRef = useRef();
-  const confirmPasswordInputRef = useRef();
-  const authCtx = useContext(AuthContext);
+
   const verifyCheck = async (token) => {
     // console.log(token);
     const res = await fetch(
