@@ -7,3 +7,10 @@
   float: right;
   background-color: #e6e6e6;
 }
+
+.verified {
+  font-style: italic;
+  margin: 20px;
+  font-size: 1.5rem;
+  display: flex;
+}

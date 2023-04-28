@@ -14,6 +14,21 @@ const Login = (props) => {
   const passwordInputRef = useRef();
   const confirmPasswordInputRef = useRef();
   const authCtx = useContext(AuthContext);
+  const verifyCheck = async (token) => {
+    console.log(token);
+    const res = await fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyD6M77g5hyGAAfUwgTZiK0AFwn3M1o5cpc",
+      { method: "POST", body: JSON.stringify({ idToken: token }) }
+    );
+    let data;
+    if (res.ok) {
+      data = await res.json();
+      if (data.users[0].emailVerified) {
+        authCtx.verify();
+      }
+    }
+    console.log(data.users[0].emailVerified);
+  };
   const formSubmitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -55,6 +70,7 @@ const Login = (props) => {
 
       if (res.ok) {
         data = await res.json();
+
         console.log(
           isLogin
             ? "User has successfully logged in"
@@ -65,6 +81,7 @@ const Login = (props) => {
         throw new Error(errorMessage);
       }
       const token = data.idToken;
+      verifyCheck(token);
       // console.log(token);
       authCtx.login(token);
       // console.log(data);

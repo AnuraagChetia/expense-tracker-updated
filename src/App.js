@@ -19,7 +19,7 @@ function App() {
         }
       }
     }
-  });
+  }, []);
 
   const profileCompleteHandler = (name, photo) => {
     setProfileComplete(true);

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Button, Form, FormGroup } from "react-bootstrap";
 import Input from "../UI/Input";
 const User = (props) => {
@@ -9,7 +9,7 @@ const User = (props) => {
       nameRef.current.value = props.displayName;
       photoUrlRef.current.value = props.photoUrl;
     }
-  }, [props.displayName, props.photoUrl]);
+  }, [props.displayName, props.photoUrl, props.isComplete]);
 
   const formSubmitHandler = async (e) => {
     e.preventDefault();
@@ -29,15 +29,14 @@ const User = (props) => {
         headers: { "Content-Type": "application/json" },
       }
     );
-    let data;
+    // let data;
     if (res.ok) {
-      data = await res.json();
+      // data = await res.json();
       console.log("User completed profile");
     } else {
       let errorMessage = "Authentication failed!";
       throw new Error(errorMessage);
     }
-    console.log(data);
   };
   return (
     <div className="  justify-content-center align-items-center">

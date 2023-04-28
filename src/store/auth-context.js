@@ -3,16 +3,17 @@ import { createContext } from "react";
 
 const AuthContext = createContext({
   token: "",
-  
+  isVerified: false,
   isLoggedIn: false,
+  verify: () => {},
   login: (token) => {},
   logout: () => {},
 });
 
 export const AuthContextProvider = (props) => {
-  
   let initialToken = localStorage.getItem("token");
   const [token, setToken] = useState(initialToken);
+  const [isVerified, setIsVerified] = useState(false);
   const userIsLoggedIn = !!token;
 
   const loginHandler = (token) => {
@@ -24,9 +25,15 @@ export const AuthContextProvider = (props) => {
     setToken(null);
     localStorage.clear();
   };
+
+  const verifiedHandler = () => {
+    setIsVerified(true);
+  };
   const contextValue = {
     token: token,
+    isVerified: isVerified,
     isLoggedIn: userIsLoggedIn,
+    verify: verifiedHandler,
     login: loginHandler,
     logout: logoutHandler,
   };
