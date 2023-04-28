@@ -5,17 +5,24 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import AuthContext from "../../store/auth-context";
 const Login = (props) => {
+  const [forgetMode, setForgetMode] = useState(false);
   const switchModeHandler = () => {
     setisLogin((prevState) => !prevState);
+    setForgetMode(false);
+  };
+  const switchToForgetPassword = () => {
+    setisLogin((prevState) => !prevState);
+    setForgetMode((prevState) => !prevState);
   };
   const navigate = useNavigate();
   const [isLogin, setisLogin] = useState(false);
+  // const forgetPasswordEmailRef = useRef();
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const confirmPasswordInputRef = useRef();
   const authCtx = useContext(AuthContext);
   const verifyCheck = async (token) => {
-    console.log(token);
+    // console.log(token);
     const res = await fetch(
       "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyD6M77g5hyGAAfUwgTZiK0AFwn3M1o5cpc",
       { method: "POST", body: JSON.stringify({ idToken: token }) }
@@ -27,7 +34,22 @@ const Login = (props) => {
         authCtx.verify();
       }
     }
-    console.log(data.users[0].emailVerified);
+    // console.log(data.users[0].emailVerified);
+  };
+
+  const forgetPasswordHandler = async () => {
+    const enteredEmail = emailInputRef.current.value;
+    await fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyD6M77g5hyGAAfUwgTZiK0AFwn3M1o5cpc",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          requestType: "PASSWORD_RESET",
+          email: enteredEmail,
+        }),
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   };
   const formSubmitHandler = async (e) => {
     e.preventDefault();
@@ -71,11 +93,11 @@ const Login = (props) => {
       if (res.ok) {
         data = await res.json();
 
-        console.log(
-          isLogin
-            ? "User has successfully logged in"
-            : "User has successfully signed up."
-        );
+        // console.log(
+        //   isLogin
+        //     ? "User has successfully logged in"
+        //     : "User has successfully signed up."
+        // );
       } else {
         let errorMessage = "Authentication failed!";
         throw new Error(errorMessage);
@@ -119,48 +141,71 @@ const Login = (props) => {
         onSubmit={formSubmitHandler}
       >
         <FormGroup>
-          <h1>{isLogin ? "Login" : "Signup"}</h1>
-          <Input
-            label="Email address"
-            type="email"
-            placeholder="name@example.com"
-            text="We will never share your email with anyone else."
-            ref={emailInputRef}
-          ></Input>
+          {!forgetMode && (
+            <>
+              <h1>{isLogin ? "Login" : "Signup"}</h1>
+              <Input
+                label="Email address"
+                type="email"
+                placeholder="name@example.com"
+                text="We will never share your email with anyone else."
+                ref={emailInputRef}
+              ></Input>
 
-          <Input
-            label="Password"
-            type="password"
-            placeholder="Password"
-            ref={passwordInputRef}
-          ></Input>
-
-          {!isLogin && (
-            <Input
-              label="Confirm Password"
-              type="password"
-              placeholder="Password"
-              ref={confirmPasswordInputRef}
-            ></Input>
+              <Input
+                label="Password"
+                type="password"
+                placeholder="Password"
+                ref={passwordInputRef}
+              ></Input>
+              {!isLogin && (
+                <Input
+                  label="Confirm Password"
+                  type="password"
+                  placeholder="Password"
+                  ref={confirmPasswordInputRef}
+                ></Input>
+              )}
+              <Button
+                variant="primary"
+                type="submit"
+                className="col-md-12 text-center"
+              >
+                {isLogin ? "Login" : "Signup"}
+              </Button>
+              {isLogin && (
+                <Button
+                  type="button"
+                  variant="danger"
+                  className="col-md-12 text-center mt-2"
+                  onClick={switchToForgetPassword}
+                >
+                  Forget Password?
+                </Button>
+              )}
+            </>
           )}
 
-          <Button
-            variant="primary"
-            type="submit"
-            className="col-md-12 text-center"
-          >
-            {isLogin ? "Login" : "Signup"}
-          </Button>
-
-          {isLogin && (
-            <Button
-              type="button"
-              variant="danger"
-              className="col-md-12 text-center mt-2"
-            >
-              Forget Password?
-            </Button>
+          {forgetMode && (
+            <>
+              <h3>Enter the email with which you have registered</h3>
+              <Input
+                label="Enter email"
+                type="email"
+                placeholder="name@example.com"
+                ref={emailInputRef}
+              />
+              <Button
+                variant="secondary"
+                type="button"
+                className="col-md-12 text-center"
+                onClick={forgetPasswordHandler}
+              >
+                Send link
+              </Button>
+            </>
           )}
+
           <Button
             className="col-md-12 text-center mt-2"
             variant="warning"
