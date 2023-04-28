@@ -32,7 +32,7 @@ const ExpenseForm = (props) => {
         <Input label="Amount" type="number" ref={amountRef}></Input>
         <Input label="Description" type="text" ref={descriptionRef}></Input>
         <Form.Select aria-label="Default select example" ref={categoryRef}>
-          <option>Category</option>
+          <option value="">Category</option>
           <option value="Food">Food</option>
           <option value="Petrol">Petrol</option>
           <option value="Salary">Salary </option>
