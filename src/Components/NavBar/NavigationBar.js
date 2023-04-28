@@ -15,7 +15,7 @@ const NavigationBar = (props) => {
       <Container fluid>
         <NavbarBrand>Expense Tracker</NavbarBrand>
         <Nav>
-          <Nav.Link>Home</Nav.Link>
+          <Nav.Link to="/home">Home</Nav.Link>
           <Nav.Link>Product</Nav.Link>
           <Nav.Link>About Us</Nav.Link>
           <Nav.Link onClick={logoutHandler}>Logout</Nav.Link>

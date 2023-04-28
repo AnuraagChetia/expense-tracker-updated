@@ -13,6 +13,7 @@ const ExpenseList = (props) => {
             amount={expense.amount}
             description={expense.description}
             category={expense.category}
+            id={expense.id}
             key={expense.description}
           ></ExpenseItem>
         ))}

@@ -20,6 +20,9 @@ const ExpenseForm = (props) => {
       category: enteredCategory,
     };
     expenseCtx.addExpense(newExpense);
+    amountRef.current.value = "";
+    descriptionRef.current.value = "";
+    categoryRef.current.value = "";
   };
   return (
     <div className=" text-center justify-content-center align-items-center">
@@ -29,9 +32,18 @@ const ExpenseForm = (props) => {
         onSubmit={formSubmitHandler}
       >
         <h1 style={{ marginBottom: "20px" }}>Add Expense</h1>
-        <Input label="Amount" type="number" ref={amountRef}></Input>
-        <Input label="Description" type="text" ref={descriptionRef}></Input>
-        <Form.Select aria-label="Default select example" ref={categoryRef}>
+        <Input label="Amount" type="number" ref={amountRef} id="amount"></Input>
+        <Input
+          label="Description"
+          type="text"
+          ref={descriptionRef}
+          id="description"
+        ></Input>
+        <Form.Select
+          aria-label="Default select example"
+          ref={categoryRef}
+          id="category"
+        >
           <option value="">Category</option>
           <option value="Food">Food</option>
           <option value="Petrol">Petrol</option>

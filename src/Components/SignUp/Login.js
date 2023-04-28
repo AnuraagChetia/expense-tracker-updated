@@ -93,7 +93,7 @@ const Login = (props) => {
 
       if (res.ok) {
         data = await res.json();
-
+        localStorage.setItem("email", enteredEmail);
         // console.log(
         //   isLogin
         //     ? "User has successfully logged in"

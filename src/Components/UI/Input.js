@@ -10,6 +10,7 @@ const Input = forwardRef((props, ref) => {
     >
       <FormControl
         type={props.type}
+        id={props.id}
         placeholder={props.placeholder}
         ref={ref}
       />

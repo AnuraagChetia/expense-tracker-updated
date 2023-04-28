@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { createContext } from "react";
+import ExpenseContext from "./expense-context";
 
 const AuthContext = createContext({
   token: "",
@@ -11,6 +12,7 @@ const AuthContext = createContext({
 });
 
 export const AuthContextProvider = (props) => {
+  const expenseCtx = useContext(ExpenseContext);
   let initialToken = localStorage.getItem("token");
   const [token, setToken] = useState(initialToken);
   const [isVerified, setIsVerified] = useState(false);
@@ -19,6 +21,7 @@ export const AuthContextProvider = (props) => {
   const loginHandler = (token) => {
     setToken(token);
     setIsLoggedIn(true);
+    expenseCtx.loginFetch();
     localStorage.setItem("token", token);
   };
 
