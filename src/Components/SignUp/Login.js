@@ -50,7 +50,7 @@ const Login = (props) => {
           "Content-Type": "application/json",
         },
       });
-
+      // console.log(res);
       let data;
 
       if (res.ok) {
@@ -64,9 +64,31 @@ const Login = (props) => {
         let errorMessage = "Authentication failed!";
         throw new Error(errorMessage);
       }
-      authCtx.login(data.idToken);
-      console.log(data);
+      const token = data.idToken;
+      // console.log(token);
+      authCtx.login(token);
+      // console.log(data);
       navigate("/home");
+
+      const profileRes = await fetch(
+        "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyD6M77g5hyGAAfUwgTZiK0AFwn3M1o5cpc",
+        {
+          method: "POST",
+          body: JSON.stringify({ idToken: token }),
+          headers: { "Content-type": "application/json" },
+        }
+      );
+      let userData;
+      if (profileRes.ok) {
+        userData = await profileRes.json();
+      }
+      const user = userData.users;
+      if (user[0].displayName && user[0].photoUrl) {
+        props.profileCompleteCheck(user[0].displayName, user[0].photoUrl);
+        localStorage.setItem("displayName", user[0].displayName);
+        localStorage.setItem("photoUrl", user[0].photoUrl);
+      }
+      // console.log(user);
     } catch (error) {
       alert(error.message);
     }

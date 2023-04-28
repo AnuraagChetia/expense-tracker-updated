@@ -3,7 +3,7 @@ import Profile from "../Components/Profile/Profile";
 const Home = (props) => {
   return (
     <>
-      <Profile></Profile>
+      <Profile isComplete={props.isComplete}></Profile>
     </>
   );
 };
