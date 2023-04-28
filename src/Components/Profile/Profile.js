@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Button, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import classes from "./Profile.module.css";

@@ -14,14 +14,16 @@ export const AuthContextProvider = (props) => {
   let initialToken = localStorage.getItem("token");
   const [token, setToken] = useState(initialToken);
   const [isVerified, setIsVerified] = useState(false);
-  const userIsLoggedIn = !!token;
+  const [isLoggedIn, setIsLoggedIn] = useState(!!token);
 
   const loginHandler = (token) => {
     setToken(token);
+    setIsLoggedIn(true);
     localStorage.setItem("token", token);
   };
 
   const logoutHandler = () => {
+    setIsLoggedIn(false);
     setToken(null);
     localStorage.clear();
   };
@@ -32,7 +34,7 @@ export const AuthContextProvider = (props) => {
   const contextValue = {
     token: token,
     isVerified: isVerified,
-    isLoggedIn: userIsLoggedIn,
+    isLoggedIn: isLoggedIn,
     verify: verifiedHandler,
     login: loginHandler,
     logout: logoutHandler,
