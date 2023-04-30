@@ -1,20 +1,23 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Button, ListGroupItem } from "react-bootstrap";
-import ExpenseContext from "../../store/expense-context";
+// import ExpenseContext from "../../store/expense-context";
+import { useDispatch } from "react-redux";
+import { expenseActions } from "../../store/expense-reducer";
 const ExpenseItem = (props) => {
-  const expenseCtx = useContext(ExpenseContext);
-  const deleteHandler = () => {
-    expenseCtx.deleteExpense(props.id);
+  const dispatch = useDispatch();
+  const deleteHandler = (e) => {
+    e.target.parentElement.remove();
+    dispatch(expenseActions.deleteExpense(props.id));
   };
-  const editHandler = () => {
+
+  const editHandler = (e) => {
     const amount = document.getElementById("amount");
     const description = document.getElementById("description");
     const category = document.getElementById("category");
     amount.value = props.amount;
     description.value = props.description;
     category.value = props.category;
-    deleteHandler();
-    // props.refs.amountRef.current.value = props.amount;
+    deleteHandler(e);
   };
   return (
     <ListGroupItem

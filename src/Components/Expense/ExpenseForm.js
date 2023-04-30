@@ -1,16 +1,24 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Button, Form } from "react-bootstrap";
 import Input from "../UI/Input";
 import { useRef } from "react";
-import ExpenseContext from "../../store/expense-context";
+// import ExpenseContext from "../../store/expense-context";
+import { useDispatch } from "react-redux";
+import { expenseActions } from "../../store/expense-reducer";
 const ExpenseForm = (props) => {
-  const expenseCtx = useContext(ExpenseContext);
+  const dispatch = useDispatch();
+  // const expenseCtx = useContext(ExpenseContext);
   const amountRef = useRef();
   const descriptionRef = useRef();
   const categoryRef = useRef();
 
-  const formSubmitHandler = (e) => {
+  const formSubmitHandler = async (e) => {
     e.preventDefault();
+    const email = localStorage.getItem("email");
+    let updatedEmail;
+    if (email) {
+      updatedEmail = email.replace(/[^a-zA-Z ]/g, "");
+    }
     const enteredAmount = amountRef.current.value;
     const enteredDescription = descriptionRef.current.value;
     const enteredCategory = categoryRef.current.value;
@@ -19,11 +27,21 @@ const ExpenseForm = (props) => {
       description: enteredDescription,
       category: enteredCategory,
     };
-    expenseCtx.addExpense(newExpense);
+    // expenseCtx.addExpense(newExpense);
+    const res = await fetch(
+      `https://movieapp-d6140-default-rtdb.asia-southeast1.firebasedatabase.app/expenses/${updatedEmail}.json`,
+      {
+        method: "POST",
+        body: JSON.stringify(newExpense),
+      }
+    );
+    let data = await res.json();
+    dispatch(expenseActions.addExpense({ ...newExpense, id: data.name }));
     amountRef.current.value = "";
     descriptionRef.current.value = "";
     categoryRef.current.value = "";
   };
+
   return (
     <div className=" text-center justify-content-center align-items-center">
       <Form

@@ -1,15 +1,19 @@
 import React, { useEffect, useRef } from "react";
 import { Button, Form, FormGroup } from "react-bootstrap";
 import Input from "../UI/Input";
+import { useSelector } from "react-redux";
 const User = (props) => {
   const nameRef = useRef();
   const photoUrlRef = useRef();
+  const isComplete = useSelector((state) => {
+    return state.auth.isComplete;
+  });
   useEffect(() => {
-    if (props.isComplete) {
+    if (isComplete) {
       nameRef.current.value = props.displayName;
       photoUrlRef.current.value = props.photoUrl;
     }
-  }, [props.displayName, props.photoUrl, props.isComplete]);
+  }, [props.displayName, props.photoUrl, isComplete]);
 
   const formSubmitHandler = async (e) => {
     e.preventDefault();

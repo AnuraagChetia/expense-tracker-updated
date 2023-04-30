@@ -2,17 +2,17 @@ import React, { useRef, useState } from "react";
 import { Button, Form, FormGroup } from "react-bootstrap";
 import Input from "../UI/Input";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import AuthContext from "../../store/auth-context";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../store/auth-reducer";
 const Login = (props) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLogin, setisLogin] = useState(false);
-  // const forgetPasswordEmailRef = useRef();
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const confirmPasswordInputRef = useRef();
-  const authCtx = useContext(AuthContext);
   const [forgetMode, setForgetMode] = useState(false);
+
   const switchModeHandler = () => {
     setisLogin((prevState) => !prevState);
     setForgetMode(false);
@@ -23,7 +23,6 @@ const Login = (props) => {
   };
 
   const verifyCheck = async (token) => {
-    // console.log(token);
     const res = await fetch(
       "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyD6M77g5hyGAAfUwgTZiK0AFwn3M1o5cpc",
       { method: "POST", body: JSON.stringify({ idToken: token }) }
@@ -32,10 +31,11 @@ const Login = (props) => {
     if (res.ok) {
       data = await res.json();
       if (data.users[0].emailVerified) {
-        authCtx.verify();
+        dispatch(authActions.verify());
+        localStorage.setItem("verify", true);
       }
     }
-    // console.log(data.users[0].emailVerified);
+    
   };
 
   const forgetPasswordHandler = async () => {
@@ -88,26 +88,19 @@ const Login = (props) => {
           "Content-Type": "application/json",
         },
       });
-      // console.log(res);
       let data;
 
       if (res.ok) {
         data = await res.json();
         localStorage.setItem("email", enteredEmail);
-        // console.log(
-        //   isLogin
-        //     ? "User has successfully logged in"
-        //     : "User has successfully signed up."
-        // );
       } else {
         let errorMessage = "Authentication failed!";
         throw new Error(errorMessage);
       }
       const token = data.idToken;
       verifyCheck(token);
-      // console.log(token);
-      authCtx.login(token);
-      // console.log(data);
+
+      dispatch(authActions.login(token));
       navigate("/home");
 
       const profileRes = await fetch(
@@ -128,7 +121,6 @@ const Login = (props) => {
         localStorage.setItem("displayName", user[0].displayName);
         localStorage.setItem("photoUrl", user[0].photoUrl);
       }
-      // console.log(user);
     } catch (error) {
       alert(error.message);
     }

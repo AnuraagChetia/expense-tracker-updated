@@ -1,10 +1,15 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Button, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import classes from "./Profile.module.css";
-import AuthContext from "../../store/auth-context";
+import { useSelector } from "react-redux";
 const Profile = (props) => {
-  const authCtx = useContext(AuthContext);
+  const isVerified = useSelector((state) => {
+    return state.auth.isVerified;
+  });
+  const isComplete = useSelector((state) => {
+    return state.auth.isComplete;
+  });
   const verifyClickHandler = async () => {
     try {
       const idToken = localStorage.getItem("token");
@@ -18,10 +23,6 @@ const Profile = (props) => {
           }),
         }
       );
-      // let data;
-      // if (res.ok) {
-      //   data = await res.json();
-      // }
     } catch (error) {
       alert(error);
     }
@@ -31,19 +32,19 @@ const Profile = (props) => {
     <>
       <Container fluid className={classes.container}>
         Welcome to expense tracker
-        {props.isComplete && (
+        {isComplete && (
           <Link className={classes.span} to="/user">
             Your Profile
           </Link>
         )}
-        {!props.isComplete && (
+        {!isComplete && (
           <span className={classes.span}>
             Your profile is incomplete.
             <Link to="/user">Complete Now</Link>
           </span>
         )}
       </Container>
-      {!authCtx.isVerified && (
+      {!isVerified && (
         <span className={classes.verified}>
           Your email is not verified.
           <Button variant="light" onClick={verifyClickHandler}>
