@@ -5,6 +5,9 @@ const initialAuthState = {
   isComplete: false,
   isVerified: false,
   isLoggedIn: false,
+  email: "",
+  name: "",
+  photo: "",
 };
 
 const authSlice = createSlice({
@@ -26,6 +29,11 @@ const authSlice = createSlice({
       state.isLoggedIn = false;
       state.token = null;
       localStorage.clear();
+    },
+    setData(state, action) {
+      state.email = action.payload.email;
+      state.name = action.payload.displayName;
+      state.photo = action.payload.photoUrl;
     },
   },
 });

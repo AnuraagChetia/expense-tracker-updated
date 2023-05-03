@@ -116,11 +116,19 @@ const Login = (props) => {
       if (profileRes.ok) {
         userData = await profileRes.json();
       }
-      const user = userData.users;
-      if (user[0].displayName && user[0].photoUrl) {
-        props.profileCompleteCheck(user[0].displayName, user[0].photoUrl);
-        localStorage.setItem("displayName", user[0].displayName);
-        localStorage.setItem("photoUrl", user[0].photoUrl);
+      const user = userData.users[0];
+      if (user.displayName && user.photoUrl) {
+        dispatch(
+          authActions.setData({
+            email: user.email,
+            displayName: user.displayName,
+            photoUrl: user.photoUrl,
+          })
+        );
+        dispatch(authActions.complete());
+        props.profileCompleteCheck(user.displayName, user.photoUrl);
+        localStorage.setItem("displayName", user.displayName);
+        localStorage.setItem("photoUrl", user.photoUrl);
       }
     } catch (error) {
       alert(error.message);

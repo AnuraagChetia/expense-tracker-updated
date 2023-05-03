@@ -1,5 +1,5 @@
 import { Container, Nav, Navbar, NavbarBrand } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store/auth-reducer";
 // import { useNavigate } from "react-router-dom";
 
@@ -10,8 +10,12 @@ const NavigationBar = (props) => {
     dispatch(authActions.logout());
     // navigate("/");
   };
+  const theme = useSelector((state) => {
+    return state.theme.darkTheme;
+  });
+
   return (
-    <Navbar bg="primary" variant="dark">
+    <Navbar bg={!theme ? "primary" : "dark"} variant="dark">
       <Container fluid>
         <NavbarBrand>Expense Tracker</NavbarBrand>
         <Nav>

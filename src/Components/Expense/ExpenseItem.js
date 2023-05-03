@@ -1,13 +1,11 @@
 import React from "react";
 import { Button, ListGroupItem } from "react-bootstrap";
-// import ExpenseContext from "../../store/expense-context";
 import { useDispatch } from "react-redux";
 import { expenseActions } from "../../store/expense-reducer";
 const ExpenseItem = (props) => {
   const dispatch = useDispatch();
   const deleteHandler = (e) => {
-    e.target.parentElement.remove();
-    dispatch(expenseActions.deleteExpense(props.id));
+    dispatch(expenseActions.removeExpense(props.description));
   };
 
   const editHandler = (e) => {

@@ -1,14 +1,15 @@
 import React from "react";
 import ExpenseItem from "./ExpenseItem";
 import { ListGroup } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 const ExpenseList = (props) => {
-  // console.log(props.expenses);
+  const expenses = useSelector((state) => state.expenses.expenses);
   return (
     <div>
       <h2>Your expenses</h2>
       <ListGroup as="ol" numbered>
-        {props.expenses.map((expense) => (
+        {expenses.map((expense) => (
           <ExpenseItem
             amount={expense.amount}
             description={expense.description}
