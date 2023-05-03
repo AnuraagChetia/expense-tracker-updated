@@ -4,6 +4,8 @@ import Input from "../UI/Input";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../store/auth-reducer";
+// import { fetchAllExpenses } from "../../store/expense-reducer";
+
 const Login = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -35,7 +37,6 @@ const Login = (props) => {
         localStorage.setItem("verify", true);
       }
     }
-    
   };
 
   const forgetPasswordHandler = async () => {

@@ -3,6 +3,7 @@ import ExpenseItem from "./ExpenseItem";
 import { ListGroup } from "react-bootstrap";
 
 const ExpenseList = (props) => {
+  // console.log(props.expenses);
   return (
     <div>
       <h2>Your expenses</h2>

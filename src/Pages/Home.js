@@ -2,46 +2,27 @@ import React, { useEffect } from "react";
 import Profile from "../Components/Profile/Profile";
 import ExpenseForm from "../Components/Expense/ExpenseForm";
 import ExpenseList from "../Components/Expense/ExpenseList";
-import { useAsync } from "react-async";
-import { useState } from "react";
-
-const email = localStorage.getItem("email");
-let updatedEmail;
-if (email) {
-  updatedEmail = email.replace(/[^a-zA-Z ]/g, "");
-}
-const fetchExpenses = async ({ updatedEmail }, { signal }) => {
-  const res = await fetch(
-    `https://movieapp-d6140-default-rtdb.asia-southeast1.firebasedatabase.app/expenses/${updatedEmail}.json`
-  );
-  if (!res.ok) throw new Error(res.status);
-  return res.json();
-};
-let expensesArr = [];
-
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllExpenses } from "../store/expense-reducer";
+import Premium from "../Components/Premium/Premium";
 const Home = (props) => {
-  const [expenses, setExpenses] = useState([]);
-
-  const { data, error } = useAsync({ promiseFn: fetchExpenses, updatedEmail });
-
-  if (data != null) {
-    const keys = Object.keys(data);
-    keys.forEach((key) => {
-      expensesArr.push({ ...data[key], key });
-    });
-  }
-  if (error) {
-    alert(error.message);
-  }
+  const dispatch = useDispatch();
+  const exp = useSelector((state) => {
+    return state.expenses.expenses;
+  });
+  const totalExpense = useSelector((state) => {
+    return state.expenses.totalExpense;
+  });
   useEffect(() => {
-    setExpenses(expensesArr);
-  }, []);
+    dispatch(fetchAllExpenses());
+  }, [dispatch]);
 
   return (
     <>
       <Profile isComplete={props.isComplete}></Profile>
+      {totalExpense > 10000 && <Premium></Premium>}
       <ExpenseForm></ExpenseForm>
-      <ExpenseList expenses={expenses}></ExpenseList>
+      <ExpenseList expenses={exp}></ExpenseList>
     </>
   );
 };
